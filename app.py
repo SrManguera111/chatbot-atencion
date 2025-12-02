@@ -22,7 +22,7 @@ with st.sidebar:
     st.markdown("[Obtener API Key gratis aquí](https://console.groq.com/keys)")
     
     st.divider()
-    st.info("Modelo: Llama3-8b-8192 (Vía Groq)")
+    st.info("Modelo: "llama-3.3-70b-versatile")
 
 # --- BASE DE CONOCIMIENTO (Aquí centralizas la información) ---
 # Puedes editar este texto para cambiar las respuestas del bot
@@ -107,4 +107,5 @@ if prompt := st.chat_input("Escribe tu pregunta aquí (ej: ¿A qué hora abren?)
     except Exception as e:
 
         st.error(f"Ocurrió un error al conectar con Groq: {e}")
+
 

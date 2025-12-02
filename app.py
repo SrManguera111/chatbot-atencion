@@ -18,7 +18,7 @@ Este asistente responde automáticamente preguntas frecuentes sobre horarios, ub
 with st.sidebar:
     st.header("Configuración")
     # Entrada para la API Key (para seguridad en Streamlit Cloud)
-    groq_api_key = st.text_input("Introduce tu Groq API Key:", type="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")
+    groq_api_key = st.text_input("Introduce tu Groq API Key:", type="password")
     st.markdown("[Obtener API Key gratis aquí](https://console.groq.com/keys)")
     
     st.divider()
@@ -105,4 +105,5 @@ if prompt := st.chat_input("Escribe tu pregunta aquí (ej: ¿A qué hora abren?)
         st.session_state.messages.append({"role": "assistant", "content": response})
 
     except Exception as e:
+
         st.error(f"Ocurrió un error al conectar con Groq: {e}")

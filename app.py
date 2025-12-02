@@ -22,7 +22,8 @@ with st.sidebar:
     st.markdown("[Obtener API Key gratis aquí](https://console.groq.com/keys)")
     
     st.divider()
-    st.info("Modelo: "llama-3.3-70b (Via Groq)")
+    # INFORMACIÓN ACTUALIZADA
+    st.info("Modelo: Llama-3.3-70b (Vía Groq)")
 
 # --- BASE DE CONOCIMIENTO (Aquí centralizas la información) ---
 # Puedes editar este texto para cambiar las respuestas del bot
@@ -81,31 +82,36 @@ if prompt := st.chat_input("Escribe tu pregunta aquí (ej: ¿A qué hora abren?)
         client = Groq(api_key=groq_api_key)
         
         # Construimos el historial para enviarlo al modelo
-        # Incluimos el "system prompt" con el conocimiento de la empresa
         messages_payload = [
             {"role": "system", "content": CONOCIMIENTO_EMPRESA}
         ]
-        # Añadimos los últimos mensajes del chat para mantener contexto
         for msg in st.session_state.messages:
             messages_payload.append({"role": msg["role"], "content": msg["content"]})
 
-        stream = client.chat.completions.create(
-            model="llama-3.3-70b-versatile", # Modelo rápido y eficiente
+        completion = client.chat.completions.create(
+            model="llama-3.3-70b-versatile", 
             messages=messages_payload,
-            temperature=0.5, # Baja temperatura para respuestas más precisas y menos creativas
+            temperature=0.5, 
             max_tokens=500,
             stream=True,
         )
 
-        # 4. Mostrar respuesta en tiempo real (streaming)
+        # FUNCIÓN GENERADORA CORREGIDA:
+        # Esto "limpia" la respuesta para obtener solo el texto, evitando el JSON feo
+        def stream_data():
+            for chunk in completion:
+                if chunk.choices[0].delta.content:
+                    yield chunk.choices[0].delta.content
+
+        # 4. Mostrar respuesta en tiempo real
         with st.chat_message("assistant"):
-            response = st.write_stream(stream)
+            # Pasamos la función limpiadora en lugar del objeto crudo
+            response = st.write_stream(stream_data)
         
         # 5. Guardar respuesta en historial
         st.session_state.messages.append({"role": "assistant", "content": response})
 
     except Exception as e:
-
         st.error(f"Ocurrió un error al conectar con Groq: {e}")
 
 

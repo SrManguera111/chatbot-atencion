@@ -90,7 +90,7 @@ if prompt := st.chat_input("Escribe tu pregunta aquí (ej: ¿A qué hora abren?)
             messages_payload.append({"role": msg["role"], "content": msg["content"]})
 
         stream = client.chat.completions.create(
-            model="llama3-8b-8192", # Modelo rápido y eficiente
+            model="llama-3.3-70b-versatile", # Modelo rápido y eficiente
             messages=messages_payload,
             temperature=0.5, # Baja temperatura para respuestas más precisas y menos creativas
             max_tokens=500,
@@ -107,3 +107,4 @@ if prompt := st.chat_input("Escribe tu pregunta aquí (ej: ¿A qué hora abren?)
     except Exception as e:
 
         st.error(f"Ocurrió un error al conectar con Groq: {e}")
+
